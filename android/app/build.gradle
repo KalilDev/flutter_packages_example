@@ -32,6 +32,10 @@ def keystorePropertiesFile = rootProject.file("key.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
+def profileKeystorePropertiesFile = rootProject.file("key.profile.properties")
+def profileKeystoreProperties = new Properties()
+profileKeystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 def debugKeystorePropertiesFile = rootProject.file("key.debug.properties")
 def debugKeystoreProperties = new Properties()
 debugKeystoreProperties.load(new FileInputStream(keystorePropertiesFile))
@@ -64,13 +68,19 @@ android {
     }
 
     signingConfigs {
-        release{
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-        }
         debug{
+            keyAlias debugKeystoreProperties['keyAlias']
+            keyPassword debugKeystoreProperties['keyPassword']
+            storeFile file(debugKeystoreProperties['storeFile'])
+            storePassword debugKeystoreProperties['storePassword']
+        }
+        profile{
+            keyAlias profileKeystoreProperties['keyAlias']
+            keyPassword profileKeystoreProperties['keyPassword']
+            storeFile file(profileKeystoreProperties['storeFile'])
+            storePassword profileKeystoreProperties['storePassword']
+        }
+        release{
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
             storeFile file(keystoreProperties['storeFile'])
@@ -85,7 +95,7 @@ android {
             signingConfig signingConfigs.debug
         }
         profile {
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.profile
         }
     }
 }
